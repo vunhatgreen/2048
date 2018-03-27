@@ -1,0 +1,46 @@
+body {
+    background: rgb(50,50,50);
+}
+
+h1 {
+    color: aliceblue;
+    font-size: 100px;
+}
+
+p {
+    color: aliceblue;
+    font: 15px arial, sans-serif;
+    font-size: 20px;
+}
+p:hover {
+    transition-duration: 0.4s;
+    font-size: 20px;
+}
+
+#canvas {
+    background: white;
+    border-radius: 10px;
+}
+
+
+.dv-canvas{
+    margin-top: 100px;
+    margin-left: -350px;
+    padding-left: 50%;
+}
+
+
+.dv-name{
+    margin-top: -400px;
+    margin-left: 100px;
+    padding-left: 50%;
+}
+
+.dv-score {
+    width: 85px;
+    height: 85px;
+    text-align: center;
+    background: ;
+    margin-top: 0px;
+    margin-left: 800px;
+}
