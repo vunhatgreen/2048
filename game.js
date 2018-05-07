@@ -14,8 +14,8 @@ var colorHex = {
             "v128": "#FF0000",
             "v256": "#967FF9",
             "v512": "#000080",
-            "v1024": "#f3904f",
-            "v2048": "#8080ff"
+            "v1024": "#F3904F",
+            "v2048": "#8080FF"
 };
 
 var map = {
@@ -29,6 +29,7 @@ setup();
 addRandom();
 addRandom();
 render();
+
 
 function setup() {
     for(var x = 0; x < 4; x++) {
