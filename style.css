@@ -1,46 +1,123 @@
 body {
-    background: rgb(50,50,50);
+    background: black;
+    color: white;
 }
 
-h1 {
-    color: aliceblue;
-    font-size: 100px;
+#button {
+    margin: auto;
+    font: 70px Consolas;
+    color: white;
+    margin-bottom: -15px;
+    border-radius: 5px;
+    transition: 1s;
+    z-index: 6;
 }
 
-p {
-    color: aliceblue;
-    font: 15px arial, sans-serif;
-    font-size: 20px;
-}
-p:hover {
-    transition-duration: 0.4s;
-    font-size: 20px;
-}
-
-#canvas {
-    background: white;
-    border-radius: 10px;
-}
-
-
-.dv-canvas{
-    margin-top: 100px;
-    margin-left: -350px;
-    padding-left: 50%;
-}
-
-
-.dv-name{
-    margin-top: -400px;
-    margin-left: 100px;
-    padding-left: 50%;
-}
-
-.dv-score {
-    width: 85px;
-    height: 85px;
+#undo, #score {
+    border: none;
+    outline: none;
+    width: 100px;
+    height: 70px;
     text-align: center;
-    background: ;
-    margin-top: 0px;
-    margin-left: 800px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    background: white;
+    font: 15px Consolas;
+    color: black;
+    float: left;
+}
+
+#title {
+    float: left;
+}
+
+#undo {
+    margin-left: 10px;
+}
+
+#score {
+    margin-left: 50px;
+}
+
+#undo:hover, #score:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+
+.game-container {
+    display: grid;
+    grid-column-gap: 10px;
+    z-index: 1;
+    padding: 10px
+}
+
+.grid-container {
+    position: relative;
+    display: grid;
+    width: 430px;
+    height: 430px;
+    padding: 10px;
+    margin: auto;
+    grid-gap: 10px;
+    border-radius: 3px;
+    background: white;
+}
+
+.grid-row {
+    display: grid;
+    grid-template-columns: repeat(4, 100px);
+    grid-column-gap: 10px;
+}
+
+.grid-cell {
+    display: block;
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    background: #D2D2C8;
+}
+
+.tile-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 430px;
+    height: 430px;
+    
+}
+
+.tile {
+    position: absolute;
+    z-index: 3;
+    width: 100px;
+    height: 100px;
+    display: block;
+    line-height: 100px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 5px;
+    font-size: 50px;
+    font-family: Consolas;
+    color: white;
+}
+
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: scale(0);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.new-tile {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    animation: appear 100ms linear 50ms;
+    animation-fill-mode: both;
 }
