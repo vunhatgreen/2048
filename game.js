@@ -94,7 +94,7 @@ function handler(direction){
             }
 
             move(row, col, direction, state);            
-            $("#score").html("Score<br>" + this.score);
+            $("#score").html("SCORE<br>" + this.score);
 }
 
 function move(row, col, direction, state){

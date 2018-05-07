@@ -41,7 +41,7 @@ body {
 
 #undo:hover, #score:hover {
     cursor: pointer;
-    font-weight: bold;
+    background: #D2D2C8;
 }
 
 
