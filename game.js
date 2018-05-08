@@ -94,6 +94,7 @@ function handler(direction){
     if (state.changed == 1){
         didUndo = false;
         addRandom();
+        checkGameContinue();
         pushStack();
     }
         $("#score").html("SCORE<br>" + this.score);
@@ -186,13 +187,37 @@ function makeUndo() {
     if(stack.length > 0) {
         if(!didUndo) stack.splice(-17,17);
         score = stack.pop();
-        $("#score").html("Score<br>" + score);
+        $("#score").html("SCORE<br>" + score);
         for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--){
             values[x][y] = stack.pop();
         }
         render();
         didUndo = true;
     }
+}
+
+
+function checkGameContinue() {
+    if(isEnd()) {
+        $("#title").html('END');
+    }
+}
+
+
+function isEnd() {
+    var counter = 0;
+    for(var x = 0; x < 4; x++) for(var y = 0; y < 4; y++) if(values[x][y] != 0) counter++;
+    if(counter == 16){
+        counter = 0;
+        for(var x = 0; x < 4; x++) for(var y = 0; y < 4; y++) {
+            var a = ((x+1) < 4) ? values[x+1][y] : 0;
+            var b = ((x-1) >= 0) ? values[x-1][y] : 0;
+            var c = ((y+1) < 4) ? values[x][y+1] : 0;
+            var d = ((y-1) >= 0) ? values[x][y-1] : 0;
+            if(![a, b, c, d].includes(values[x][y])) counter++;
+        }
+    }
+    return (counter == 16) ? true : false; 
 }
 
 
