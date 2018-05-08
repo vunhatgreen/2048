@@ -5,7 +5,6 @@ var score = 0;
 var stack = [];
 var tiles = [];
 var values = [];
-var didUndo = false;
 this.colorHex = {
             "v0":    "#D2D2C8",
             "v2":    "#FA5252",
@@ -94,7 +93,6 @@ function handler(direction) {
                 case 'RIGHT':   move(0, 0, direction, state); break;
             }
     if (state.changed){
-        didUndo = false;
         addRandom();
         checkGameOver();
         pushStack();
@@ -183,16 +181,14 @@ function pushStack() {
 }
 
 function makeUndo() {
-    if(stack.length > 0) {
-        if(!didUndo) {
-            stack.splice(-17,17);  
-            didUndo = true;
-        } 
+    if(stack.length > 25) {
+        stack.splice(-17,17);
         score = stack.pop();
         $("#score").html("SCORE<br>" + score);
         for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--) values[x][y] = stack.pop();
+        pushStack();
         render();
-    } else pushStack();
+    }
 }
 
 //CHECK ENDGAME
