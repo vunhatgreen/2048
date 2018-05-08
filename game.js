@@ -182,6 +182,7 @@ function pushStack() {
 
 function makeUndo() {
     if(stack.length > 25) {
+        $("#title").html('2048');
         stack.splice(-17,17);
         score = stack.pop();
         $("#score").html("SCORE<br>" + score);
