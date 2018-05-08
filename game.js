@@ -1,9 +1,9 @@
 var tileContainer = document.querySelector(".tile-container");
 var values = [];
 var tiles = [];
-var score = 0;
+var score = [];
 var stack = [];
-this.colorHex = {
+var colorHex = {
             "v0": "#D2D2C8",
             "v2": "#FA5252",
             "v4": "#607BB0",
@@ -14,20 +14,27 @@ this.colorHex = {
             "v128": "#FF0000",
             "v256": "#967FF9",
             "v512": "#000080",
-            "v1024": "#f3904f",
-            "v2048": "#8080ff"
+            "v1024": "#F3904F",
+            "v2048": "#8080FF"
 };
 
-this.map = {
+var map = {
                 'UP': { row: 1, col: 0, x: 1, y: 0 },
                 'LEFT': { row: 0, col: -1, x: 0, y: 1 },
                 'DOWN': { row: -1, col: 0, x: 1, y: 0 },
                 'RIGHT': { row: 0, col: 1, x: 0, y: 1 }
-            };
+};
+
+setup();
+addRandom();
+addRandom();
+render();
+
+
 function setup() {
     for(var x = 0; x < 4; x++) {
         values[x] = [];
-        for(var y = 0; y < 4; y++) {values[x][y] = 0;}
+        for(var y = 0; y < 4; y++) values[x][y] = 0;
     }
 }
 
@@ -36,9 +43,8 @@ function render(){
       tiles[i] = [];
       for (var j = 0; j < 4; j++) {
           tiles[i][j] = document.createElement("div");
-          tiles[i][j].className = "tile";
-          console.log(tiles[i][j]);
-          tileContainer.appendChild(tiles[i][j]);
+          $(tiles[i][j]).addClass("tile");
+          this.tileContainer.appendChild(tiles[i][j]);
           var value = values[i][j];
           $(tiles[i][j]).css("background", this.colorHex[`v${value}`]);
           if (value != 0) {
@@ -46,6 +52,7 @@ function render(){
           } else {
               tiles[i][j].innerHTML = "";
           }
+
           var x = 110 * j + 10;
           var y = 110 * i + 10;
           $(tiles[i][j]).css("left", `${x}px`);
@@ -64,61 +71,84 @@ function addRandom() {
 
 
 function handler(direction){
+  var row;
+  var col;
             var state = { changed: 0 };
+
             switch (direction) {
                 case 'UP':
-                    move(0, 0, direction, state);            
+                    row = 0;
+                    col = 0;
                     break;
                 case 'LEFT':
-                    move(0, 3, direction, state); 
+                    row = 0;
+                    col = 3;
                     break;
                 case 'DOWN':
-                    move(3, 0, direction, state); 
+                    row = 3;
+                    col = 0;
                     break;
                 case 'RIGHT':
-                    move(0, 0, direction, state); 
+                    row = 0;
+                    col = 0;
                     break;
             }
 
+            move(row, col, direction, state);            
             $("#score").html("SCORE<br>" + this.score);
 }
 
-function move(row, col, direction, state) {
-   while (row < 4 || col < 4) {
+function move(row, col, direction, state){
+  while (true) {
                 var currentRow = row;
                 var currentCol = col;
-                while ((currentRow >= 0 && currentRow <= 3) && (currentCol >= 0 && currentCol <= 3)) {
+                while (true) {
+                    if (currentRow > 3 || currentRow < 0 || currentCol > 3 || currentCol < 0) {
+                        break;
+
+                    }
+                    var current = this.values[currentRow][currentCol];
+
                     var nextRow = currentRow + this.map[direction].row;
                     var nextCol = currentCol + this.map[direction].col;
-                 
-                    while ((nextRow >= 0 && nextRow <= 3) && (nextCol >= 0 && nextCol <= 3)) {
-                        console.log(nextRow + " " + nextCol);
-                        console.log(values[nextRow][nextCol]);
-                        if (values[nextRow][nextCol] == 0) {
+                    if (nextRow > 3 || nextRow < 0 || nextCol > 3 || nextCol < 0) {
+                        break;
+
+                    }
+                    while (true) {
+
+                        var next = this.values[nextRow][nextCol];
+                        if (next == 0) {
                             nextRow += this.map[direction].row;
                             nextCol += this.map[direction].col;
-                    
-                        } else if (values[nextRow][nextCol] == values[currentRow][currentCol]) {
-                            values[currentRow][currentCol] <<= 1;
-                            values[nextRow][nextCol] = 0;
-                            this.updatePosition(currentRow, currentCol, nextRow, nextCol, values[currentRow][currentCol]);
+                            if (nextRow > 3 || nextRow < 0 || nextCol > 3 || nextCol < 0) {
+                                break;
+
+                            }
+                        } else if (next == current) {
+                            current <<= 1;
+                            next = 0;
+                            score += current;
+                            updatePosition(currentRow, currentCol, nextRow, nextCol, current);
                             state.changed = 1;
                             break;
 
                         } else {
-                            if (values[currentRow][currentCol] == 0 && values[nextRow][nextCol]!= 0) {
-                                values[currentRow][currentCol] = values[nextRow][nextCol];
-                                values[nextRow][nextCol] = 0;
-                                this.updatePosition(currentRow, currentCol, nextRow, nextCol, values[currentRow][currentCol]);
+                            if (current == 0 && next != 0) {
+                                current = next;
+                                next = 0;
+                                updatePosition(currentRow, currentCol, nextRow, nextCol, current);
                                 state.changed = 1;
                                 currentRow -= this.map[direction].row;
                                 currentCol -= this.map[direction].col;
                                 break;
-                            } else if (values[currentRow][currentCol] != 0) {
+                            } else if (current != 0) {
                                 break;
 
                             }
+
                         }
+
 
                     }
                     currentRow += this.map[direction].row;
@@ -130,7 +160,6 @@ function move(row, col, direction, state) {
                 col += this.map[direction].x;
 
                 if (row > 3 || row < 0) {
-                    console.log("break");
                     break;
 
                 }
@@ -141,19 +170,18 @@ function move(row, col, direction, state) {
             }
 }
 
-
-
 function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
   var currentTile = tiles[currentRow][currentCol];
-  var nextTile = tiles[nextRow][nextCol];
-  var clone = nextTile.cloneNode(true);
-  nextTile.innerHTML = "";
+      var nextTile = tiles[nextRow][nextCol];
+            var clone = nextTile.cloneNode(true);
+            nextTile.innerHTML = "";
             $(nextTile).css("background", "none");
             var colorHex = this.colorHex[`v${value}`];
             tileContainer.appendChild(clone);
             $(clone).animate({
                 "left": `${$(currentTile).css("left")}`,
                 "top": `${$(currentTile).css("top")}`,
+                "transition-timing-function": "linear",
             });
 
             setTimeout(function () {
@@ -163,23 +191,3 @@ function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
 
             }, 200);
 }
-
-document.addEventListener("DOMContentLoaded", function() {
-  setup();
-  addRandom();
-  addRandom();
-  render();
-});
-
-
-
-document.addEventListener("keydown", function(e) {
-  console.log(e.keyCode);
-  switch(e.key.toUpperCase()){
-        case "D": handler("LEFT");  break;
-        case "W": handler("UP");    break;
-        case "A": handler("RIGHT"); break;
-        case "S": handler("DOWN");  break;
-    }
-
-});
