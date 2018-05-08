@@ -1,3 +1,5 @@
+//VARIABLE
+
 var tileContainer = document.querySelector(".tile-container");
 var score = 0;
 var stack = [];
@@ -25,6 +27,17 @@ this.map = {
                 'DOWN':  { row: -1, col: 0, x: 1, y: 0 },
                 'RIGHT': { row: 0, col: 1, x: 0, y: 1  }
             };
+
+document.addEventListener("DOMContentLoaded", function() {
+  setup();
+  addRandom();
+  addRandom();
+  pushStack();
+  render();
+});
+
+//SETUP AND RENDER
+
 function setup() {
     for(var x = 0; x < 4; x++) {
         values[x] = [];
@@ -34,25 +47,31 @@ function setup() {
 }
 
 function render(){
-  for (var i = 0; i < 4; i++) {
-      for (var j = 0; j < 4; j++) {
-        tiles[i][j] = document.createElement("div");
-    tiles[i][j].className = "tile";
-    tileContainer.appendChild(tiles[i][j]);
-    var value = values[i][j];
-    $(tiles[i][j]).css("background", this.colorHex[`v${value}`]);
-    if (value != 0) {
-        tiles[i][j].innerHTML = value;
-    } else {
-        tiles[i][j].innerHTML = "";
+    for (var i = 0; i < 4; i++) {
+        for (var j = 0; j < 4; j++) {
+            tiles[i][j] = document.createElement("div");
+            tiles[i][j].className = "tile";
+            tileContainer.appendChild(tiles[i][j]);
+            var value = values[i][j];
+            $(tiles[i][j]).css("background", this.colorHex[`v${value}`]);
+            tiles[i][j].innerHTML = (value != 0) ? value : "";
+            var x = 110 * j + 10;
+            var y = 110 * i + 10;
+            $(tiles[i][j]).css("left", `${x}px`);
+            $(tiles[i][j]).css("top", `${y}px`);
+        }
     }
-    var x = 110 * j + 10;
-    var y = 110 * i + 10;
-    $(tiles[i][j]).css("left", `${x}px`);
-    $(tiles[i][j]).css("top", `${y}px`);
-    
-      }
-  }
+}
+
+//CREATE TILE
+
+function addRandom() {
+     do {
+        var x = Math.floor(Math.random() * 4);
+        var y = Math.floor(Math.random() * 4);
+    } while (values[x][y])
+    values[x][y] = Math.random() < 0.9 ? 2 : 4;
+    setTile(x, y);
 }
 
 function setTile(x, y) {
@@ -64,14 +83,7 @@ function setTile(x, y) {
     }, 150);
 }
 
-function addRandom() {
-     do {
-        var x = Math.floor(Math.random() * 4);
-        var y = Math.floor(Math.random() * 4);
-    } while (values[x][y])
-    values[x][y] = Math.random() < 0.9 ? 2 : 4;
-    setTile(x, y);
-}
+//SET TILE POSITION
 
 function handler(direction) {
     var state = { changed: false };
@@ -142,8 +154,6 @@ function move(row, col, direction, state) {
         }
 }
 
-
-
 function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
   var currentTile = tiles[currentRow][currentCol];
   var nextTile = tiles[nextRow][nextCol];
@@ -154,8 +164,8 @@ function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
             tileContainer.appendChild(clone);
             $(clone).animate({
                 "left": `${$(currentTile).css("left")}`,
-                "top": `${$(currentTile).css("top")}`,
-            },100);
+                "top":  `${$(currentTile).css("top")}`,
+            }, 100);
 
             setTimeout(function () {
                 $(clone).remove();                
@@ -165,6 +175,7 @@ function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
             }, 100);
 }
 
+//UNDO FEATURE
 
 function pushStack() {
     for(var x = 0; x < 4; x++) for(var y = 0; y < 4; y++) stack.push(values[x][y]);
@@ -176,21 +187,17 @@ function makeUndo() {
         if(!didUndo) stack.splice(-17,17);
         score = stack.pop();
         $("#score").html("SCORE<br>" + score);
-        for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--){
-            values[x][y] = stack.pop();
-        }
+        for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--) values[x][y] = stack.pop();
         render();
         didUndo = true;
     }
 }
 
+//CHECK ENDGAME
 
 function checkGameOver() {
-    if(isEnd()) {
-        $("#title").html('END!');
-    }
+    if(isEnd()) $("#title").html('END!');
 }
-
 
 function isEnd() {
     var counter = 0;
@@ -208,16 +215,7 @@ function isEnd() {
     return (counter == 16) ? true : false; 
 }
 
-
-
-document.addEventListener("DOMContentLoaded", function() {
-  setup();
-  addRandom();
-  addRandom();
-  pushStack();
-  render();
-});
-
+//KEYBOARD AND MOUSE CONTROLLER
 
 document.onkeydown = function(e) {
     switch(e.keyCode){
@@ -227,7 +225,6 @@ document.onkeydown = function(e) {
         case 40: handler("DOWN");  break;
     }
 }
-
 
 $('#undo').click(function(){
     makeUndo();
