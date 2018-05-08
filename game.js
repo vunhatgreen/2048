@@ -184,13 +184,15 @@ function pushStack() {
 
 function makeUndo() {
     if(stack.length > 0) {
-        if(!didUndo) stack.splice(-17,17);
+        if(!didUndo) {
+            stack.splice(-17,17);  
+            didUndo = true;
+        } 
         score = stack.pop();
         $("#score").html("SCORE<br>" + score);
         for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--) values[x][y] = stack.pop();
         render();
-        didUndo = true;
-    }
+    } else pushStack();
 }
 
 //CHECK ENDGAME
