@@ -5,7 +5,7 @@ body {
 
 #button {
     margin: auto;
-    font: 65px Tahoma;
+    font: 70px Consolas;
     color: white;
     margin-bottom: -15px;
     border-radius: 5px;
@@ -23,11 +23,8 @@ body {
     border-radius: 5px 5px 0px 0px;
 =======
     border-radius: 5px;
-<<<<<<< HEAD
     margin-bottom: 5px;
 >>>>>>> 30f450968183d7a63d7c4a1f8a441ada7ce0fdd0
-=======
->>>>>>> parent of 30f4509... change game.js
     background: white;
     font: 15px Consolas;
     color: black;
@@ -104,7 +101,7 @@ body {
     text-align: center;
     vertical-align: middle;
     border-radius: 5px;
-    font-size: 45px;
+    font-size: 50px;
     font-family: Consolas;
     color: white;
 }
