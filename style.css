@@ -31,8 +31,9 @@ body {
 
 #score { margin-left: 50px; }
 
-#undo:hover, #score:hover {
+#undo:hover {
     cursor: pointer;
+    transition: .5s;
     background: #D2D2C8;
 }
 

@@ -186,6 +186,7 @@ function makeUndo() {
         score = stack.pop();
         $("#score").html("SCORE<br>" + score);
         for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--) values[x][y] = stack.pop();
+        $(tileContainer).empty();
         pushStack();
         render();
     }
@@ -203,9 +204,9 @@ function isEnd() {
     if(counter == 16){
         counter = 0;
         for(var x = 0; x < 4; x++) for(var y = 0; y < 4; y++) {
-            var a = ((x+1) < 4) ? values[x+1][y] : 0;
+            var a = ((x+1) < 4)  ? values[x+1][y] : 0;
             var b = ((x-1) >= 0) ? values[x-1][y] : 0;
-            var c = ((y+1) < 4) ? values[x][y+1] : 0;
+            var c = ((y+1) < 4)  ? values[x][y+1] : 0;
             var d = ((y-1) >= 0) ? values[x][y-1] : 0;
             if(![a, b, c, d].includes(values[x][y])) counter++;
         }
