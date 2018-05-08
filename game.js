@@ -1,29 +1,29 @@
 var tileContainer = document.querySelector(".tile-container");
-var values = [];
-var tiles = [];
 var score = 0;
 var stack = [];
+var tiles = [];
+var values = [];
 var didUndo = false;
 this.colorHex = {
-            "v0": "#D2D2C8",
-            "v2": "#FA5252",
-            "v4": "#607BB0",
-            "v8": "#9FE660",
-            "v16": "#E6D960",
-            "v32": "#C77070",
-            "v64": "#4DA6FF",
-            "v128": "#FF0000",
-            "v256": "#967FF9",
-            "v512": "#000080",
+            "v0":    "#D2D2C8",
+            "v2":    "#FA5252",
+            "v4":    "#607BB0",
+            "v8":    "#9FE660",
+            "v16":   "#E6D960",
+            "v32":   "#C77070",
+            "v64":   "#4DA6FF",
+            "v128":  "#FF0000",
+            "v256":  "#967FF9",
+            "v512":  "#000080",
             "v1024": "#f3904f",
             "v2048": "#8080ff"
 };
 
 this.map = {
-                'UP': { row: 1, col: 0, x: 1, y: 0 },
-                'LEFT': { row: 0, col: -1, x: 0, y: 1 },
-                'DOWN': { row: -1, col: 0, x: 1, y: 0 },
-                'RIGHT': { row: 0, col: 1, x: 0, y: 1 }
+                'UP':    { row: 1, col: 0, x: 1, y: 0  },
+                'LEFT':  { row: 0, col: -1, x: 0, y: 1 },
+                'DOWN':  { row: -1, col: 0, x: 1, y: 0 },
+                'RIGHT': { row: 0, col: 1, x: 0, y: 1  }
             };
 function setup() {
     for(var x = 0; x < 4; x++) {
@@ -57,12 +57,11 @@ function render(){
 
 function setTile(x, y) {
     $(tiles[x][y]).css("background", this.colorHex[`v${values[x][y]}`]);
-    console.log(values[x][y]);
     $(tiles[x][y]).addClass("new-tile");
     $(tiles[x][y]).html(values[x][y]);
     setTimeout(function () {
         $(tiles[x][y]).removeClass("new-tile");
-    }, 100);
+    }, 150);
 }
 
 function addRandom() {
@@ -74,27 +73,18 @@ function addRandom() {
     setTile(x, y);
 }
 
-
-function handler(direction){
-    var state = { changed: 0 };
+function handler(direction) {
+    var state = { changed: false };
             switch (direction) {
-                case 'UP':
-                    move(0, 0, direction, state);            
-                    break;
-                case 'LEFT':
-                    move(0, 3, direction, state); 
-                    break;
-                case 'DOWN':
-                    move(3, 0, direction, state); 
-                    break;
-                case 'RIGHT':
-                    move(0, 0, direction, state); 
-                    break;
+                case 'UP':      move(0, 0, direction, state); break;
+                case 'LEFT':    move(0, 3, direction, state); break;
+                case 'DOWN':    move(3, 0, direction, state); break;
+                case 'RIGHT':   move(0, 0, direction, state); break;
             }
-    if (state.changed == 1){
+    if (state.changed){
         didUndo = false;
         addRandom();
-        checkGameContinue();
+        checkGameOver();
         pushStack();
     }
         $("#score").html("SCORE<br>" + this.score);
@@ -109,8 +99,6 @@ function move(row, col, direction, state) {
                 var nextCol = currentCol + this.map[direction].col;
              
                 while ((nextRow >= 0 && nextRow <= 3) && (nextCol >= 0 && nextCol <= 3)) {
-                    console.log(nextRow + " " + nextCol);
-                    console.log(values[nextRow][nextCol]);
                     if (values[nextRow][nextCol] == 0) {
                         nextRow += this.map[direction].row;
                         nextCol += this.map[direction].col;
@@ -120,7 +108,7 @@ function move(row, col, direction, state) {
                         score += values[currentRow][currentCol];
                         values[nextRow][nextCol] = 0;
                         updatePosition(currentRow, currentCol, nextRow, nextCol, values[currentRow][currentCol]);
-                        state.changed = 1;
+                        state.changed = true;
                         break;
 
                     } else {
@@ -128,7 +116,7 @@ function move(row, col, direction, state) {
                             values[currentRow][currentCol] = values[nextRow][nextCol];
                             values[nextRow][nextCol] = 0;
                             updatePosition(currentRow, currentCol, nextRow, nextCol, values[currentRow][currentCol]);
-                            state.changed = 1;
+                            state.changed = true;
                             currentRow -= this.map[direction].row;
                             currentCol -= this.map[direction].col;
                             break;
@@ -197,7 +185,7 @@ function makeUndo() {
 }
 
 
-function checkGameContinue() {
+function checkGameOver() {
     if(isEnd()) {
         $("#title").html('END!');
     }
@@ -239,6 +227,7 @@ document.onkeydown = function(e) {
         case 40: handler("DOWN");  break;
     }
 }
+
 
 $('#undo').click(function(){
     makeUndo();
