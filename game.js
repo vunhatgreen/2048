@@ -62,7 +62,7 @@ function setTile(x, y) {
     $(tiles[x][y]).html(values[x][y]);
     setTimeout(function () {
         $(tiles[x][y]).removeClass("new-tile");
-    }, 200);
+    }, 100);
 }
 
 function addRandom() {
@@ -167,14 +167,14 @@ function updatePosition(currentRow, currentCol, nextRow, nextCol, value){
             $(clone).animate({
                 "left": `${$(currentTile).css("left")}`,
                 "top": `${$(currentTile).css("top")}`,
-            });
+            },100);
 
             setTimeout(function () {
                 $(clone).remove();                
                 currentTile.innerHTML = value;
                 $(currentTile).css("background", colorHex);
 
-            }, 200);
+            }, 100);
 }
 
 
@@ -199,7 +199,7 @@ function makeUndo() {
 
 function checkGameContinue() {
     if(isEnd()) {
-        $("#title").html('END');
+        $("#title").html('END!');
     }
 }
 
