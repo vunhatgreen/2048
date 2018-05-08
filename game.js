@@ -183,14 +183,16 @@ function pushStack() {
 }
 
 function makeUndo() {
-    if(!didUndo) stack.splice(-17,17);
-    score = stack.pop();
-    $("#score").html("Score<br>" + score);
-    for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--){
-        values[x][y] = stack.pop();
-        setTile(x, y);
+    if(stack.length > 0) {
+        if(!didUndo) stack.splice(-17,17);
+        score = stack.pop();
+        $("#score").html("Score<br>" + score);
+        for(var x = 3; x >= 0; x--) for(var y = 3; y >= 0; y--){
+            values[x][y] = stack.pop();
+        }
+        render();
+        didUndo = true;
     }
-    didUndo = true;
 }
 
 
