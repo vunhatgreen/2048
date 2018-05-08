@@ -5,7 +5,7 @@ body {
 
 #button {
     margin: auto;
-    font: 65px Tahoma;
+    font: 70px Consolas;
     color: white;
     margin-bottom: -15px;
     border-radius: 5px;
@@ -20,6 +20,7 @@ body {
     height: 70px;
     text-align: center;
     border-radius: 5px;
+    margin-bottom: 5px;
     background: white;
     font: 15px Consolas;
     color: black;
@@ -96,7 +97,7 @@ body {
     text-align: center;
     vertical-align: middle;
     border-radius: 5px;
-    font-size: 45px;
+    font-size: 50px;
     font-family: Consolas;
     color: white;
 }
