@@ -19,12 +19,7 @@ body {
     width: 100px;
     height: 70px;
     text-align: center;
-<<<<<<< HEAD
     border-radius: 5px 5px 0px 0px;
-=======
-    border-radius: 5px;
-    margin-bottom: 5px;
->>>>>>> 30f450968183d7a63d7c4a1f8a441ada7ce0fdd0
     background: white;
     font: 15px Consolas;
     color: black;
